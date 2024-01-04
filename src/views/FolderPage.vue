@@ -16,16 +16,15 @@
         </ion-toolbar>
       </ion-header>
 
-      <div id="container">
-        <strong class="capitalize">{{ $route.params.id }}</strong>
-        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+      <AllItem />
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import AllItem from "@/components/AllItem.vue"
+
 </script>
 
 <style scoped>

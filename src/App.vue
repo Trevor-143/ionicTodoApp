@@ -16,11 +16,11 @@
           </ion-list>
 
           <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
+            <ion-list-header>Categories</ion-list-header>
 
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon aria-hidden="true" slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
+            <ion-item v-for="(i, index) in categories" lines="none" :key="index">
+              <ion-icon aria-hidden="true" slot="start" :ios="i.icon" :md="i.icon"></ion-icon>
+              <ion-label>{{ i.title }}</ion-label>
             </ion-item>
           </ion-list>
         </ion-content>
@@ -31,78 +31,55 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IonApp,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
-  IonMenu,
-  IonMenuToggle,
-  IonNote,
-  IonRouterOutlet,
-  IonSplitPane,
-} from '@ionic/vue';
+import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { ref } from 'vue';
-import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-} from 'ionicons/icons';
+import { heartHalf, person, briefcase, home, people, addCircle, listCircle, checkmarkCircle, alertCircle } from 'ionicons/icons';
 
 const selectedIndex = ref(0);
 const appPages = [
   {
-    title: 'Inbox',
-    url: '/folder/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    title: 'Add Task',
+    url: '/folder/add-task',
+    iosIcon: addCircle,
+    mdIcon: addCircle,
   },
   {
-    title: 'Outbox',
-    url: '/folder/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
+    title: 'Tasks',
+    url: '/folder/tasks',
+    iosIcon: listCircle,
+    mdIcon: listCircle,
   },
   {
-    title: 'Favorites',
-    url: '/folder/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
+    title: 'Complete',
+    url: '/folder/complete',
+    iosIcon: checkmarkCircle,
+    mdIcon: checkmarkCircle,
   },
   {
-    title: 'Archived',
-    url: '/folder/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
-  {
-    title: 'Trash',
-    url: '/folder/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
-  },
-  {
-    title: 'Spam',
-    url: '/folder/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
-  },
+    title: 'Pending',
+    url: '/folder/pending',
+    iosIcon: alertCircle,
+    mdIcon: alertCircle,
+  }
 ];
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
+const categories = [
+  { title: 'Family',
+    icon: home,
+  },
+  { title: 'Friends',
+    icon: people,
+  },
+  { title: 'Work',
+    icon: briefcase,
+  },
+  { title: 'Personal',
+    icon: person,
+  },
+  { title: 'Health',
+    icon: heartHalf,
+  }
+];
 
 const path = window.location.pathname.split('folder/')[1];
 if (path !== undefined) {
