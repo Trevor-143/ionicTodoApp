@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/',
-    redirect: '/folder/Tasks'
+    redirect: '/views/AddTask'
   },
   {
     path: '/folder/:id',

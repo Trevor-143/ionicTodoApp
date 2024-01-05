@@ -6,11 +6,11 @@
           <ion-list id="inbox-list">
             <div class="userContainer">
               <ion-thumbnail>
-                <img :src="FemaleIcon" alt="user icon">
+                <img :src="MaleIcon" alt="user icon">
               </ion-thumbnail>
               <div class="sideInfo">
-                <ion-list-header>Inbox</ion-list-header>
-                <ion-note>hi@ionicframework.com</ion-note>
+                <ion-list-header>Arapu Trevor</ion-list-header>
+                <ion-note>araputrevor2@gmail.com</ion-note>
               </div>
             </div>
 
@@ -147,7 +147,7 @@ ion-menu.md ion-list#labels-list ion-list-header {
 ion-menu.md ion-item {
   --padding-start: 10px;
   --padding-end: 10px;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
 }
 
 ion-menu.md ion-item.selected {

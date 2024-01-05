@@ -2,9 +2,9 @@
     <ion-list lines="none" >
       <ion-item-sliding>
         <ion-item-options side="start">
-          <ion-item-option color="success" class="onTheLeft" >
+          <ion-item-option color="warning" class="onTheLeft" >
             <ion-icon slot="start" :icon="archive"></ion-icon>
-            Archive
+            Pause
           </ion-item-option>
         </ion-item-options>
   
@@ -13,9 +13,9 @@
         </ion-item>
   
         <ion-item-options side="end" class="onTheRightCont" >
-          <ion-item-option class="onTheRight" >
+          <ion-item-option class="onTheRight" color="success" >
             <ion-icon slot="start" :icon="heart"></ion-icon>
-            Favorite
+            Complete
           </ion-item-option>
           <ion-item-option class="onTheRight"  color="danger">
             <ion-icon slot="start" :icon="trash"></ion-icon>
@@ -43,7 +43,7 @@
 <style scoped>
 ion-list {
     background: rgb(255, 0, 0, 0);
-    padding: 0.5rem;
+    padding: 1rem;
 }
 ion-item-sliding {
     margin: 0.5rem 0;
@@ -55,10 +55,10 @@ ion-item-sliding {
 }
 ion-item {
     --background: #f4f4f4;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
 }
 ion-item-option {
-    border-radius: 0.5rem;
+    border-radius: 1rem;
 }
 .onTheLeft  {
     margin-right: 0.5rem;
