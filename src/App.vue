@@ -4,8 +4,15 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>Inbox</ion-list-header>
-            <ion-note>hi@ionicframework.com</ion-note>
+            <div class="userContainer">
+              <ion-thumbnail>
+                <img :src="FemaleIcon" alt="user icon">
+              </ion-thumbnail>
+              <div class="sideInfo">
+                <ion-list-header>Inbox</ion-list-header>
+                <ion-note>hi@ionicframework.com</ion-note>
+              </div>
+            </div>
 
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
@@ -31,35 +38,43 @@
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
+import { IonApp, IonContent, IonIcon, IonItem, IonThumbnail, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { ref } from 'vue';
-import { heartHalf, person, briefcase, home, people, addCircle, listCircle, checkmarkCircle, alertCircle } from 'ionicons/icons';
+import { heartHalf, person, briefcase, home, people, listCircle, checkmarkCircle, alertCircle, pauseCircle } from 'ionicons/icons';
+import FemaleIcon from "/female.png"
+import MaleIcon from "/male.png"
 
 const selectedIndex = ref(0);
 const appPages = [
   {
-    title: 'Add Task',
-    url: '/folder/add-task',
-    iosIcon: addCircle,
-    mdIcon: addCircle,
+    title: 'Start',
+    url: '/views/AddTask',
+    iosIcon: home,
+    mdIcon: home,
   },
   {
     title: 'Tasks',
-    url: '/folder/tasks',
+    url: '/folder/Tasks',
     iosIcon: listCircle,
     mdIcon: listCircle,
   },
   {
     title: 'Complete',
-    url: '/folder/complete',
+    url: '/folder/Complete',
     iosIcon: checkmarkCircle,
     mdIcon: checkmarkCircle,
   },
   {
     title: 'Pending',
-    url: '/folder/pending',
+    url: '/folder/Pending',
     iosIcon: alertCircle,
     mdIcon: alertCircle,
+  },
+  {
+    title: 'Paused',
+    url: '/folder/Paused',
+    iosIcon: pauseCircle,
+    mdIcon: pauseCircle,
   }
 ];
 
@@ -103,10 +118,6 @@ ion-menu.md ion-list {
   padding: 20px 0;
 }
 
-ion-menu.md ion-note {
-  margin-bottom: 30px;
-}
-
 ion-menu.md ion-list-header,
 ion-menu.md ion-note {
   padding-left: 10px;
@@ -136,7 +147,7 @@ ion-menu.md ion-list#labels-list ion-list-header {
 ion-menu.md ion-item {
   --padding-start: 10px;
   --padding-end: 10px;
-  border-radius: 4px;
+  border-radius: 0.5rem;
 }
 
 ion-menu.md ion-item.selected {
@@ -165,7 +176,6 @@ ion-menu.ios ion-list {
 
 ion-menu.ios ion-note {
   line-height: 24px;
-  margin-bottom: 20px;
 }
 
 ion-menu.ios ion-item {
@@ -193,18 +203,22 @@ ion-menu.ios ion-note {
   padding-right: 16px;
 }
 
-ion-menu.ios ion-note {
-  margin-bottom: 8px;
-}
-
 ion-note {
   display: inline-block;
-  font-size: 16px;
-
+  font-size: 13px;
   color: var(--ion-color-medium-shade);
 }
 
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+.userContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  /* background-color: red; */
+  margin-bottom: 20px;
+}
+
 </style>

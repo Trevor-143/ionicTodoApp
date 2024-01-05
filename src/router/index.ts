@@ -3,8 +3,12 @@ import { RouteRecordRaw } from 'vue-router';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '',
-    redirect: '/folder/tasks'
+    path: '/views/AddTask',
+    component: () => import ('../views/AddTask.vue')
+  },
+  {
+    path: '/',
+    redirect: '/folder/Tasks'
   },
   {
     path: '/folder/:id',
