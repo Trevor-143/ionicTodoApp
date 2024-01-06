@@ -6,9 +6,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/views/AddTask',
     component: () => import ('../views/AddTask.vue')
   },
+  // {
+  //   path: '/',
+  //   redirect: '/views/AddTask'
+  // },
   {
     path: '/',
-    redirect: '/views/AddTask'
+    component: () => import ('../views/Initial.vue')
   },
   {
     path: '/folder/:id',

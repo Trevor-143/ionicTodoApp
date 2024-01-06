@@ -3,7 +3,9 @@
         <ion-header :translucent="true" class="ion-no-border" >
             <ion-toolbar>
                 <ion-buttons slot="start">
-                    <ion-menu-button color="primary"></ion-menu-button>
+                    <ion-menu-button color="primary">
+                        <ion-icon :icon="grid" ></ion-icon>
+                    </ion-menu-button>
                 </ion-buttons>
                 <ion-title>Good Morning</ion-title>
             </ion-toolbar>
@@ -11,7 +13,10 @@
 
         <ion-content :fullscreen="true">
             <div class="theForm">
-                <h3> <ion-icon :icon="addCircle"></ion-icon> <span>Hey, Add new Task</span> </h3>
+                <h3>
+                    <ion-icon :icon="addCircle"></ion-icon>
+                    <span>Hey, Add new Task</span>
+                </h3>
                 <ion-list lines="none" >
                     <ion-item>
                         <ion-label position="floating">Task</ion-label>
@@ -19,7 +24,7 @@
                     </ion-item>
                     <ion-item>
                         <ion-select placeholder="Select category" v-model="newTaskForm.category" >
-                            <ion-select-option 
+                            <ion-select-option
                             v-for="(i, index) in categories" :key="index"
                             :value="i"
                             >
@@ -35,7 +40,8 @@
                     </div>
                 </ion-list>
             </div>
-            <!-- <Done /> -->
+            <Done v-if="sent" />
+            <Loading v-if="sending" />
             <h4>Categories</h4>
             <div class="cats">
                 <div class="oneCat" v-for="(i, index) in cats" :key="index" :class="i.iconTypeColor" >
@@ -54,19 +60,20 @@
 <script setup>
 
 import { IonPage, IonHeader, IonSelect, IonSelectOption, IonIcon, IonList, IonItem, IonInput, IonLabel, IonButton, IonContent, IonButtons, IonMenuButton, IonTitle, IonToolbar,  } from "@ionic/vue"
-import { addCircle, listCircle, checkmarkCircle, alertCircle, pauseCircle } from "ionicons/icons"
+import { checkmarkCircle, notificationsCircle, stopCircle, addCircle, listCircle, alertCircle, pauseCircle, grid } from "ionicons/icons"
 import AllItem from "@/components/AllItem.vue"
 import Loading from "@/components/Loading.vue"
 import Done from "@/components/Done.vue"
 import { ref } from "vue"
 import { doc, setDoc } from "firebase/firestore"; 
 import { Store } from "@/firebase/config"
+import MaleIcon from "/male.png"
 
 const cats = [
     { icon: listCircle, name: 'All Tasks', iconTypeColor: 'blue' },
     { icon: checkmarkCircle, name: 'Complete Tasks', iconTypeColor: 'green' },
-    { icon: alertCircle, name: 'Pending Tasks', iconTypeColor: 'yellow' },
-    { icon: pauseCircle, name: 'Paused Tasks', iconTypeColor: 'orange' }
+    { icon: notificationsCircle, name: 'Pending Tasks', iconTypeColor: 'yellow' },
+    { icon: stopCircle, name: 'Paused Tasks', iconTypeColor: 'orange' }
 ]
 
 const categories = [ 'Family', 'Friends', 'Work', 'Personal', 'Health', ]
@@ -77,11 +84,26 @@ const newTaskForm = ref({
     status: 'pending'   
 })
 
+const sending = ref(false)
+const sent = ref(false)
+
 const addTask = async () => {
-    console.log(newTaskForm.value)
-    const taskId = newTaskForm.value.title.replace(/\ /g, '-')
-    await setDoc(doc(Store, "users", "userid-1", 'tasks', taskId), newTaskForm.value);
-    console.log('done')
+    try {
+        // console.log(newTaskForm.value)
+        sending.value = true
+        const taskId = newTaskForm.value.title.replace(/\ /g, '-')
+        await setDoc(doc(Store, "users", "userid-1", 'tasks', taskId), newTaskForm.value);
+        // console.log('done')
+        sending.value = false
+        sent.value = true
+        setTimeout(() => {
+            sent.value = false
+            newTaskForm.value.title = ''
+            newTaskForm.value.category = ''
+        }, 2000);
+    } catch (error) {
+        console.log('sorry', error)
+    }
 }
 
 </script>
@@ -150,9 +172,7 @@ h4 {
     font-weight: 600;
 }
 .blue {
-    background-color: rgb(0, 0, 255, 0.2);
-    padding: 1rem;
-    text-align: center;
+    background-color: rgb(0, 0, 255, 0.1);
     border-radius: 1rem;
     display: flex;
     align-items: center;
@@ -162,11 +182,11 @@ h4 {
 .blue ion-icon {
     margin-bottom: 1rem;
     font-size: 3rem;
-    /* color: rgb(0, 0, 255); */
-    color: #ffffff;
+    color: rgb(0, 0, 255);
+    /* color: #ffffff; */
 }
 .green {
-    background-color: rgb(0, 128, 0, 0.2);
+    background-color: rgb(0, 128, 0, 0.1);
     padding: 1rem;
     text-align: center;
     border-radius: 1rem;
@@ -178,11 +198,11 @@ h4 {
 .green ion-icon {
     margin-bottom: 1rem;
     font-size: 3rem;
-    /* color: rgb(0, 128, 0); */
-    color: #ffffff;
+    color: rgb(0, 128, 0);
+    /* color: #ffffff; */
 }
 .yellow {
-    background-color: rgb(255, 0, 0, 0.2);
+    background-color: rgb(255, 0, 0, 0.1);
     padding: 1rem;
     text-align: center;
     border-radius: 1rem;
@@ -194,11 +214,11 @@ h4 {
 .yellow ion-icon {
     margin-bottom: 1rem;
     font-size: 3rem;
-    /* color: rgb(255, 0, 0); */
-    color: #ffffff;
+    color: rgb(255, 0, 0);
+    /* color: #ffffff; */
 }
 .orange {
-    background-color: rgb(255, 165, 0, 0.2);
+    background-color: rgb(255, 165, 0, 0.1);
     padding: 1rem;
     text-align: center;
     border-radius: 1rem;
@@ -210,8 +230,8 @@ h4 {
 .orange ion-icon {
     margin-bottom: 1rem;
     font-size: 3rem;
-    /* color: rgb(255, 165, 0); */
-    color: #ffffff;
+    color: rgb(255, 165, 0);
+    /* color: #ffffff; */
 }
 .completeTasks h4 {
     margin: 0;
@@ -219,4 +239,5 @@ h4 {
     margin-left: 1.5rem;
     margin-bottom: -0.5rem;
 }
+
 </style>

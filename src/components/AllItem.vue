@@ -1,20 +1,20 @@
 <template>
     <ion-list lines="none" >
-      <ion-item-sliding>
+      <ion-item-sliding v-for="task in allTasks" :key="task.id">
         <ion-item-options side="start">
           <ion-item-option color="warning" class="onTheLeft" >
-            <ion-icon slot="start" :icon="archive"></ion-icon>
+            <ion-icon slot="start" :icon="pauseCircle"></ion-icon>
             Pause
           </ion-item-option>
         </ion-item-options>
   
         <ion-item>
-          <ion-label> Sliding Item with Start Icons </ion-label>
+          <ion-label> {{ task.title }} </ion-label>
         </ion-item>
   
         <ion-item-options side="end" class="onTheRightCont" >
           <ion-item-option class="onTheRight" color="success" >
-            <ion-icon slot="start" :icon="heart"></ion-icon>
+            <ion-icon slot="start" :icon="checkmarkCircle"></ion-icon>
             Complete
           </ion-item-option>
           <ion-item-option class="onTheRight"  color="danger">
@@ -27,17 +27,20 @@
     </ion-list>
   </template>
   
-  <script lang="ts">
+  <script setup>
     import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/vue';
-    import { archive, heart, trash } from 'ionicons/icons';
-    import { defineComponent } from 'vue';
-  
-    export default defineComponent({
-      components: { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList },
-      setup() {
-        return { archive, heart, trash };
-      },
-    });
+    import { pauseCircle, checkmarkCircle, trash } from 'ionicons/icons';
+    import { onBeforeMount, ref } from "vue"
+
+    const props = defineProps(['tasks'])
+    const allTasks = ref([])
+
+    onBeforeMount(() => {
+      allTasks.value = props.tasks
+    })
+
+    // console.log(props.tasks)
+
   </script>
 
 <style scoped>
@@ -59,6 +62,9 @@ ion-item {
 }
 ion-item-option {
     border-radius: 1rem;
+}
+ion-icon {
+  font-size: 30px;
 }
 .onTheLeft  {
     margin-right: 0.5rem;
