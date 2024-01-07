@@ -64,6 +64,10 @@ import { updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPasswo
 import { Authenticate } from "@/firebase/config"
 import { useRouter } from "vue-router"
 import { useCookie } from "vue-cookie-next"
+import { StatusBar, Style } from "@capacitor/status-bar"
+
+StatusBar.setBackgroundColor({ color: '#3880ff' }); // Dark background color
+StatusBar.setStyle({ style: Style.Dark });
 
 const missingField = ref(false)
 const done = ref(false)
