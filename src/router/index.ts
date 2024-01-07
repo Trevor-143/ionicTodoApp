@@ -17,6 +17,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/folder/:id',
     component: () => import ('../views/FolderPage.vue')
+  },
+  {
+    path: '/category/:id',
+    component: () => import ('../views/Category.vue')
   }
 ]
 

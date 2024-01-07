@@ -19,7 +19,7 @@
       </ion-header>
 
       <ion-list lines="none" >
-        <ion-item-sliding v-for="task in tasksCollection" :key="task.id">
+        <ion-item-sliding v-if="tasksCollection.length > 0" v-for="task in tasksCollection" :key="task.id">
           <ion-item-options side="start">
             <ion-item-option color="warning" class="onTheLeft" @click="changeTaskStatus(task.id, getStatusButtonText(task.status))" >
               <ion-icon slot="start" :icon="pauseCircle"></ion-icon>
@@ -52,6 +52,13 @@
             </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
+        <div v-else class="substitute">
+          <img :src="NoTaskImage" alt="empty tasks container">
+          <div class="noInfo">
+            <h1>No {{$route.params.id}} {{ $route.params.id === 'Tasks' ? '':'tasks' }}</h1>
+            <div class="dash"></div>
+          </div>
+        </div>
       </ion-list>
     </ion-content>
     <Loading v-if="loading" />
@@ -69,6 +76,7 @@ import { onMounted, ref, watchEffect, watch } from "vue"
 import { useRoute } from "vue-router"
 import Loading from "@/components/Loading.vue"
 import Done from "@/components/Done.vue"
+import NoTaskImage from "/noTasks.jpeg"
 
 const userId = 'userid-1'
 const tasksCollection = ref([])
@@ -92,23 +100,49 @@ const getIcon = (status) => {
 const loading = ref(false)
 const done = ref(false)
 
-const getTasks = () => {
+watch(() => route.params.id, (newId, oldId) => {
+  handleRouteParamChange(newId, oldId);
+  getTasks(newId)
+});
+
+function handleRouteParamChange(newId, oldId) {
+  console.log(`Route parameter changed from ${oldId} to ${newId}`);
+}
+
+const getTasks = (newId) => {
   const q = query(collection(Store, "users", userId, 'tasks'));
-  if(taskID.value) {
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const tempTasks = [];
-      // const theTask = taskID.value.toLowerCase()
-      querySnapshot.forEach((doc) => {
+  if (newId != undefined) {
+    if ( newId === 'Pause' || newId === 'Complete' || newId === 'Pending' ) {
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const tempTasks = [];
+        // const theTask = taskID.value.toLowerCase()
+        querySnapshot.forEach((doc) => {
+          if( doc.data().status === newId.toLowerCase() ) {
+            const eachTask = {
+              id: doc.id,
+              ...doc.data()
+            }
+            tempTasks.push(eachTask);
+          }
+        });
+        // console.log(tempTasks)
+        tasksCollection.value = tempTasks
+      });
+    } else {
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const tempTasks = [];
+        // const theTask = taskID.value.toLowerCase()
+        querySnapshot.forEach((doc) => {
           const eachTask = {
             id: doc.id,
             ...doc.data()
           }
           tempTasks.push(eachTask);
+        });
+        // console.log(tempTasks)
+        tasksCollection.value = tempTasks
       });
-      // console.log(tempTasks)
-      tasksCollection.value = tempTasks
-    });
-    return
+    }
   }
 }
 
@@ -154,25 +188,40 @@ const getButtonText = (status) => {
 }
 
 onMounted(() => {
-  getTasks()
+  getTasks(taskID.value)
   console.log(taskID.value)
 })
 
-watch(() => route.params.id, (newId, oldId) => {
-  // Perform actions when $route.params.id changes
-  handleRouteParamChange(newId, oldId);
-});
-
-// Define the function to handle the route parameter change
-function handleRouteParamChange(newId, oldId) {
-  // Your logic when $route.params.id changes
-  console.log(`Route parameter changed from ${oldId} to ${newId}`);
-  // Call other functions or update component state as needed
-}
+// const filterTask = (tasks, taskStatus) => {
+//   if (taskStatus === "all tasks") {
+//     return tasks;
+//   }
+//   const filtered = tasks.filter((task) =>
+//     task.status.toLowerCase().includes(taskStatus.toLowerCase())
+//   );
+//   if (filtered.length > 0) {
+//     return filtered;
+//   } else {
+//     return tasks;
+//   }
+// };
 
 </script>
 
 <style scoped>
+
+.md body ion-toolbar {
+    --padding-top: 10px;
+    /* --padding-start: 10px; */
+    --padding-end: 10px;
+    --padding-bottom: 10px;
+}
+.ios body ion-toolbar {
+    --padding-top: 20px;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-bottom: 20px;
+}
 #container {
   text-align: center;
   position: absolute;
@@ -263,6 +312,47 @@ ion-icon {
 .greenIcon {
   color: #00b700;
 }
+.substitute {
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+.substitute img {
+  width: 100%;
+  display: block;
+}
+.noInfo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  /* background-color: rgba(0,0,0,0.2); */
+  color: #000000;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1rem;
+}
 
+.dash {
+  height: 5px;
+  width: 5rem;
+  border-radius: 1rem;
+  margin: 0.5rem auto;
+  background-color: red;
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-item {
+    --background: #000000;
+  }
+  .onTheLeft, .onTheRight {
+    color: #000000;
+  }
+  .ios body ion-item {
+    --background: #1f1f1f;
+  }
+}
 
 </style>

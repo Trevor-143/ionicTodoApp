@@ -25,10 +25,12 @@
           <ion-list id="labels-list">
             <ion-list-header>Categories</ion-list-header>
 
-            <ion-item v-for="(i, index) in categories" lines="none" :key="index">
-              <ion-icon aria-hidden="true" slot="start" :ios="i.icon" :md="i.icon"></ion-icon>
-              <ion-label>{{ i.title }}</ion-label>
-            </ion-item>
+            <ion-menu-toggle :auto-hide="false" v-for="(p, i) in categories" :key="i">
+              <ion-item @click="selectedCatIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedCatIndex === i }">
+                <ion-icon aria-hidden="true" slot="start" :ios="p.icon" :md="p.icon"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
           </ion-list>
         </ion-content>
       </ion-menu>
@@ -40,11 +42,13 @@
 <script setup lang="ts">
 import { IonApp, IonContent, IonIcon, IonItem, IonThumbnail, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { ref } from 'vue';
-import { heartHalf, person, briefcase, home, people, listCircle, checkmarkCircle, alertCircle, pauseCircle } from 'ionicons/icons';
+import { heartHalf, person, briefcase, home, people, listCircle, notificationsCircle, stopCircle, checkmarkCircle } from 'ionicons/icons';
 import FemaleIcon from "/female.png"
 import MaleIcon from "/male.png"
 
 const selectedIndex = ref(0);
+const selectedCatIndex = ref(5);
+
 const appPages = [
   {
     title: 'Start',
@@ -67,31 +71,41 @@ const appPages = [
   {
     title: 'Pending',
     url: '/folder/Pending',
-    iosIcon: alertCircle,
-    mdIcon: alertCircle,
+    iosIcon: notificationsCircle,
+    mdIcon: notificationsCircle,
   },
   {
     title: 'Paused',
-    url: '/folder/Paused',
-    iosIcon: pauseCircle,
-    mdIcon: pauseCircle,
+    url: '/folder/Pause',
+    iosIcon: stopCircle,
+    mdIcon: stopCircle,
   }
 ];
 
 const categories = [
-  { title: 'Family',
+  { 
+    title: 'Family',
+    url: '/category/Family',
     icon: home,
   },
-  { title: 'Friends',
+  { 
+    title: 'Friends',
+    url: '/category/Friends',
     icon: people,
   },
-  { title: 'Work',
+  { 
+    title: 'Work',
+    url: '/category/Work',
     icon: briefcase,
   },
-  { title: 'Personal',
+  { 
+    title: 'Personal',
+    url: '/category/Personal',
     icon: person,
   },
-  { title: 'Health',
+  { 
+    title: 'Health',
+    url: '/category/Health',
     icon: heartHalf,
   }
 ];
@@ -99,6 +113,11 @@ const categories = [
 const path = window.location.pathname.split('folder/')[1];
 if (path !== undefined) {
   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
+}
+
+const catPath = window.location.pathname.split('category/')[1];
+if (catPath !== undefined) {
+  selectedCatIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === catPath.toLowerCase());
 }
 
 </script>
@@ -221,6 +240,9 @@ ion-item.selected {
   flex-direction: row;
   /* background-color: red; */
   margin-bottom: 20px;
+}
+.ios body .userContainer {
+  margin-left: 0.5rem;
 }
 
 </style>
