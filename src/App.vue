@@ -9,8 +9,8 @@
                 <img :src="MaleIcon" alt="user icon">
               </ion-thumbnail>
               <div class="sideInfo">
-                <ion-list-header>Arapu Trevor</ion-list-header>
-                <ion-note>araputrevor2@gmail.com</ion-note>
+                <ion-list-header>{{loggedInUserName}}</ion-list-header>
+                <ion-note>{{loggedInUserEmail}}</ion-note>
               </div>
             </div>
 
@@ -45,6 +45,12 @@ import { ref } from 'vue';
 import { heartHalf, person, briefcase, home, people, listCircle, notificationsCircle, stopCircle, checkmarkCircle } from 'ionicons/icons';
 import FemaleIcon from "/female.png"
 import MaleIcon from "/male.png"
+import { useCookie } from "vue-cookie-next"
+
+const { getCookie } = useCookie()
+
+let loggedInUserName = ref(getCookie('loggedInUserName'))
+let loggedInUserEmail = ref(getCookie('loggedInUserEmail'))
 
 const selectedIndex = ref(0);
 const selectedCatIndex = ref(5);

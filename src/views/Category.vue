@@ -77,6 +77,10 @@
   import Loading from "@/components/Loading.vue"
   import Done from "@/components/Done.vue"
   import NoTaskImage from "/noTasks.jpeg"
+  import { useCookie } from "vue-cookie-next"
+
+  const { getCookie } = useCookie()
+  let loggedInUserId = ref(getCookie('loggedInUserId'))
   
   const userId = 'userid-1'
   const tasksCollection = ref([])
@@ -110,7 +114,7 @@
   }
   
   const getTasks = (newId) => {
-    const q = query(collection(Store, "users", userId, 'tasks'));
+    const q = query(collection(Store, "users", loggedInUserId.value, 'tasks'));
     if (newId != undefined) {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           const tempTasks = [];
@@ -132,7 +136,7 @@
   
   const changeTaskStatus = async (id, newStatus) => {
     loading.value = true
-    const taskRef = doc(Store, "users", userId, 'tasks', id);
+    const taskRef = doc(Store, "users", loggedInUserId.value, 'tasks', id);
     try {
       await updateDoc(taskRef, {
         status: newStatus

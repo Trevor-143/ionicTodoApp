@@ -53,7 +53,7 @@
 
 <script setup>
 import { IonPage, IonList, IonButton, IonItem, IonInput, IonLabel, IonThumbnail } from "@ionic/vue"
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import FemaleIcon from "/female.png"
 import MaleIcon from "/male.png"
 import Done from "@/components/Done.vue"
@@ -63,11 +63,14 @@ import MissingFields from "@/components/MissingFields.vue"
 import { updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from "firebase/auth"
 import { Authenticate } from "@/firebase/config"
 import { useRouter } from "vue-router"
+import { useCookie } from "vue-cookie-next"
 
 const missingField = ref(false)
 const done = ref(false)
 const loading = ref(false)
 const tryAgain = ref(false)
+
+const cookie = useCookie()
 
 const vueRouter = useRouter()
 
@@ -75,6 +78,23 @@ const activeForm = ref('signup')
 const toggleForm = (text) => {
     activeForm.value = text
 }
+
+let loggedInUserName = ref(cookie.getCookie('loggedInUserName'))
+let loggedInUserEmail = ref(cookie.getCookie('loggedInUserEmail'))
+let loggedInUserId = ref(cookie.getCookie('loggedInUserId'))
+
+const setCredentials = () => {
+    loggedInUserName = ref(cookie.getCookie('loggedInUserName'))
+    loggedInUserEmail = ref(cookie.getCookie('loggedInUserEmail'))
+    loggedInUserId = ref(cookie.getCookie('loggedInUserId'))
+}
+
+onMounted(() => {
+    // console.log(loggedInUserName.value, loggedInUserEmail.value, loggedInUserId.value)
+    if (loggedInUserId.value) {
+        vueRouter.push('/views/AddTask')
+    }
+})
 
 const formSignup = ref({
     fullName: '',
@@ -150,6 +170,10 @@ const logIn = async () => {
             // Signed in 
             const user = userCredential.user;
             if(user) {
+                cookie.setCookie('loggedInUserName', user.displayName);
+                cookie.setCookie('loggedInUserEmail', user.email);
+                cookie.setCookie('loggedInUserId', user.uid);
+                setCredentials()
                 loading.value = false
                 done.value = true
                 setTimeout(() => {

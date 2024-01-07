@@ -77,11 +77,15 @@ import { useRoute } from "vue-router"
 import Loading from "@/components/Loading.vue"
 import Done from "@/components/Done.vue"
 import NoTaskImage from "/noTasks.jpeg"
+import { useCookie } from "vue-cookie-next"
 
 const userId = 'userid-1'
 const tasksCollection = ref([])
 const route = useRoute();
 const taskID = ref(route.params.id);
+const { getCookie } = useCookie()
+
+let loggedInUserId = ref(getCookie('loggedInUserId'))
 
 const getIcon = (status) => {
   switch (status) {
@@ -110,7 +114,7 @@ function handleRouteParamChange(newId, oldId) {
 }
 
 const getTasks = (newId) => {
-  const q = query(collection(Store, "users", userId, 'tasks'));
+  const q = query(collection(Store, "users", loggedInUserId.value, 'tasks'));
   if (newId != undefined) {
     if ( newId === 'Pause' || newId === 'Complete' || newId === 'Pending' ) {
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -148,7 +152,7 @@ const getTasks = (newId) => {
 
 const changeTaskStatus = async (id, newStatus) => {
   loading.value = true
-  const taskRef = doc(Store, "users", userId, 'tasks', id);
+  const taskRef = doc(Store, "users", loggedInUserId.value, 'tasks', id);
   try {
     await updateDoc(taskRef, {
       status: newStatus
@@ -189,7 +193,7 @@ const getButtonText = (status) => {
 
 onMounted(() => {
   getTasks(taskID.value)
-  console.log(taskID.value)
+  console.log(taskID.value, loggedInUserId.value)
 })
 
 // const filterTask = (tasks, taskStatus) => {

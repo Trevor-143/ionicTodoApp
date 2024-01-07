@@ -54,16 +54,19 @@
     import Loading from "@/components/Loading.vue"
     import Done from "@/components/Done.vue"
     import NoTaskImage from "/noTasks.jpeg"
-
+    import { useCookie } from "vue-cookie-next"    
     
+    const { getCookie } = useCookie()
     const loading = ref(false)
     const done = ref(false)
     const allTasks = ref([])
+    
+    let loggedInUserId = ref(getCookie('loggedInUserId'))
 
-    const userId = 'userid-1'
+    // const userId = 'userid-1'
     
     const getCompleted = async () => {
-      const q = query(collection(Store, "users", userId, 'tasks'), where("status", "==", "pending"));
+      const q = query(collection(Store, "users", loggedInUserId.value, 'tasks'), where("status", "==", "pending"));
       const querySnapshot = await getDocs(q);
 
       // console.log('stating')
@@ -98,7 +101,7 @@
 
     const changeTaskStatus = async (id, newStatus) => {
       loading.value = true
-      const taskRef = doc(Store, "users", userId, 'tasks', id);
+      const taskRef = doc(Store, "users", loggedInUserId.value, 'tasks', id);
       try {
         await updateDoc(taskRef, {
           status: newStatus

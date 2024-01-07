@@ -69,6 +69,10 @@ import { doc, setDoc } from "firebase/firestore";
 import { Store } from "@/firebase/config"
 import MaleIcon from "/male.png"
 import TasckyLogo from "/tasckyLogo.png"
+import { useCookie } from "vue-cookie-next"
+
+const { getCookie } = useCookie()
+let loggedInUserId = ref(getCookie('loggedInUserId'))
 
 const cats = [
     { icon: listCircle, name: 'All Available Tasks', iconTypeColor: 'blue' },
@@ -93,7 +97,7 @@ const addTask = async () => {
         // console.log(newTaskForm.value)
         sending.value = true
         const taskId = newTaskForm.value.title.replace(/\ /g, '-')
-        await setDoc(doc(Store, "users", "userid-1", 'tasks', taskId), newTaskForm.value);
+        await setDoc(doc(Store, "users", loggedInUserId.value, 'tasks', taskId), newTaskForm.value);
         // console.log('done')
         sending.value = false
         sent.value = true
