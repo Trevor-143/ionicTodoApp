@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { IonPage, IonList, IonButton, IonItem, IonInput, IonLabel, IonThumbnail } from "@ionic/vue"
+import { IonPage, IonList, IonButton, IonItem, IonInput, IonLabel, IonThumbnail, useIonRouter } from "@ionic/vue"
 import { ref, onMounted } from "vue"
 import FemaleIcon from "/female.png"
 import MaleIcon from "/male.png"
@@ -76,6 +76,7 @@ const tryAgain = ref(false)
 
 const cookie = useCookie()
 
+const ionRouter = useIonRouter()
 const vueRouter = useRouter()
 
 const activeForm = ref('signup')
@@ -86,17 +87,20 @@ const toggleForm = (text) => {
 let loggedInUserName = ref(cookie.getCookie('loggedInUserName'))
 let loggedInUserEmail = ref(cookie.getCookie('loggedInUserEmail'))
 let loggedInUserId = ref(cookie.getCookie('loggedInUserId'))
+let loggedInUserImage = ref(cookie.getCookie('loggedInUserImage'))
+
 
 const setCredentials = () => {
     loggedInUserName = ref(cookie.getCookie('loggedInUserName'))
     loggedInUserEmail = ref(cookie.getCookie('loggedInUserEmail'))
     loggedInUserId = ref(cookie.getCookie('loggedInUserId'))
+    loggedInUserImage = ref(cookie.getCookie('loggedInUserImage'))
 }
 
 onMounted(() => {
-    // console.log(loggedInUserName.value, loggedInUserEmail.value, loggedInUserId.value)
+    console.log(loggedInUserName.value, loggedInUserEmail.value, loggedInUserId.value)
     if (loggedInUserId.value) {
-        vueRouter.push('/views/AddTask')
+        ionRouter.push('/views/AddTask')
     }
 })
 
@@ -138,13 +142,14 @@ const signUp = async () => {
         loading.value = true
         const { user } = await createUserWithEmailAndPassword (Authenticate, formSignup.value.email, formSignup.value.password)
         await updateProfile (user, {
-            displayName: formSignup.value.fullName
+            displayName: formSignup.value.fullName,
+            photoURL: formSignup.value.imageType
         });
         loading.value = false
         done.value = true
         setTimeout(() => {
             done.value = false
-            // vueRouter.push('/views/AddTask')
+            // ionRouter.push('/views/AddTask')
             activeForm.value = 'login'
         }, 2000);
     } catch (error) {
@@ -176,7 +181,8 @@ const logIn = async () => {
             if(user) {
                 cookie.setCookie('loggedInUserName', user.displayName);
                 cookie.setCookie('loggedInUserEmail', user.email);
-                cookie.setCookie('loggedInUserId', user.uid);
+                cookie.setCookie('loggedInUserId', user.uid );
+                cookie.setCookie('loggedInUserImage', user.photoURL );
                 setCredentials()
                 loading.value = false
                 done.value = true
@@ -184,7 +190,8 @@ const logIn = async () => {
                     done.value = false
                 }, 2000);
                 console.log(formLogin.value)
-                vueRouter.push('/views/AddTask')
+                ionRouter.push('/views/AddTask')
+                vueRouter.go(0)
             } else {
                 
             }
@@ -266,6 +273,14 @@ ion-button {
     .avatars div {
         background-color: #000000;
     }
+    .ion body ion-item {
+        --background: #1f1f1f;
+        background-color: #1f1f1f;
+    }
+    .ios body .avatars div {
+        background-color: #1f1f1f;
+    }
+    
 }
 
 </style>

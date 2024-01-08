@@ -131,8 +131,26 @@ const getTasks = (newId) => {
         });
         // console.log(tempTasks)
         tasksCollection.value = tempTasks
+        return
       });
-    } else {
+    } else if ( newId === 'Health' || newId === 'Family' || newId === 'Work' || newId === 'Personal' || newId === 'Friends' ) {
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const tempTasks = [];
+        // const theTask = taskID.value.toLowerCase()
+        querySnapshot.forEach((doc) => {
+          if( doc.data().category === newId ) {
+            const eachTask = {
+              id: doc.id,
+              ...doc.data()
+            }
+            tempTasks.push(eachTask);
+          }
+        });
+        // console.log(tempTasks)
+        tasksCollection.value = tempTasks
+        return
+      });
+    } else if ( newId === 'Tasks' ) {
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const tempTasks = [];
         // const theTask = taskID.value.toLowerCase()
@@ -145,7 +163,10 @@ const getTasks = (newId) => {
         });
         // console.log(tempTasks)
         tasksCollection.value = tempTasks
+        return
       });
+    } else {
+      tasksCollection.value = []
     }
   }
 }

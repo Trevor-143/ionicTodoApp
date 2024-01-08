@@ -16,6 +16,10 @@
                 <h3>
                     <ion-icon :icon="addCircle"></ion-icon>
                     <img :src="TasckyLogo" alt="logo">
+                    <div class="intro">
+                        <h1>Hey!</h1>
+                        <p>Welcome to tascky . You can add a new task and swipe left or right on any task to see options.</p>
+                    </div>
                 </h3>
                 <ion-list lines="none" >
                     <ion-item>
@@ -42,7 +46,7 @@
             </div>
             <Done v-if="sent" />
             <Loading v-if="sending" />
-            <h4>Types of Tasks</h4>
+            <h4>Categories</h4>
             <div class="cats">
                 <div class="oneCat" v-for="(i, index) in cats" :key="index" :class="i.iconTypeColor" >
                     <ion-icon :icon="i.icon"></ion-icon>
@@ -166,38 +170,41 @@ ion-title {
 h3 {
     margin: 0.5rem;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     margin-top: 2rem;
     margin-left: 1rem;
     padding-bottom: 1rem;
     position: relative;
     width: fit-content;
+    /* background-color: var(--ion-color-primary); */
+    background-color: rgb(0, 0, 255, 0.1);
+    padding: 1rem;
+    border-radius: 1rem;
+    color: #000000;
 }
 h3 ion-icon {
     color: #4c8dff;
     font-size: 2rem;
-    position: absolute;
-    bottom: 0;
-    right: 0;
     margin-right: 0rem;
+    display: none;
+}
+.intro h1 {
+    font-weight: 800;
+    font-size: 3rem;
+    margin: 0;
+}
+.intro p {
+    font-size: 0.9rem;
+    color: #303030;
 }
 h3 img {
     margin-right: 1rem;
     width: 50px;
+    height: 50px;
     border-radius: 50%;
-    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+    /* box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
     -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
-}
-h3 span {
-    font-size: 1rem;
-    max-width: fit-content;
-    width: 100%;
-    border-radius: 1rem;
-    background-color: #eeeeee;
-    padding: 0.5rem 1rem;
-    color: #000000;
-    margin-right: 0.5rem;
+    -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75); */
 }
 ion-list {
     width: 100%;
@@ -244,6 +251,7 @@ h4 {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: 2rem;
 }
 .blue ion-icon {
     margin-bottom: 1rem;
@@ -253,13 +261,13 @@ h4 {
 }
 .green {
     background-color: rgb(0, 128, 0, 0.1);
-    padding: 1rem;
     text-align: center;
     border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: 2rem;
 }
 .green ion-icon {
     margin-bottom: 1rem;
@@ -269,13 +277,13 @@ h4 {
 }
 .yellow {
     background-color: rgb(255, 0, 0, 0.1);
-    padding: 1rem;
     text-align: center;
     border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: 2rem;
 }
 .yellow ion-icon {
     margin-bottom: 1rem;
@@ -292,6 +300,7 @@ h4 {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: 2rem;
 }
 .orange ion-icon {
     margin-bottom: 1rem;
@@ -317,6 +326,13 @@ h4 {
     .ios body ion-item {
         --ion-item-background: #1f1f1f;
         background-color: #1f1f1f;
+    }
+    h3 {
+        color: #f3f3f3;
+        margin-bottom: 2rem;
+    }
+    .intro p {
+        color: #c5c5c5;
     }
 }
 </style>

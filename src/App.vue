@@ -3,10 +3,20 @@
     <ion-split-pane content-id="main-content">
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
+          <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+            <ion-refresher-content
+              :pulling-icon="chevronDownCircleOutline"
+              pulling-text="Pull to refresh"
+              refreshing-spinner="circles"
+              refreshing-text="Refreshing..."
+            >
+            </ion-refresher-content>
+          </ion-refresher>
           <ion-list id="inbox-list">
             <div class="userContainer">
               <ion-thumbnail>
-                <img :src="MaleIcon" alt="user icon">
+                <img v-if="loggedInUserImage" :src="`/${loggedInUserImage}.png`" alt="user icon">
+                <img v-else src="/tasckyLogo.png" alt="user icon">
               </ion-thumbnail>
               <div class="sideInfo">
                 <ion-list-header>{{loggedInUserName}}</ion-list-header>
@@ -20,15 +30,20 @@
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
-          </ion-list>
 
-          <ion-list id="labels-list">
-            <ion-list-header>Categories</ion-list-header>
-
-            <ion-menu-toggle :auto-hide="false" v-for="(p, i) in categories" :key="i">
-              <ion-item @click="selectedCatIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedCatIndex === i }">
-                <ion-icon aria-hidden="true" slot="start" :ios="p.icon" :md="p.icon"></ion-icon>
-                <ion-label>{{ p.title }}</ion-label>
+            <ion-menu-toggle :auto-hide="false" class="about" >
+              <h3>Tascky</h3>
+              <ion-item lines="none" :detail="false" router-link="/views/AddTask" >
+                <ion-icon :icon="home" ></ion-icon>
+                <ion-label>Home</ion-label>
+              </ion-item>
+              <ion-item lines="none" :detail="false" router-link="/views/About" >
+                <ion-icon :icon="helpCircle" ></ion-icon>
+                <ion-label>About</ion-label>
+              </ion-item>
+              <ion-item lines="none" :detail="false" @click="signOutUser" >
+                <ion-icon :icon="power" ></ion-icon>
+                <ion-label>Sign out</ion-label>
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
@@ -39,21 +54,27 @@
   </ion-app>
 </template>
 
-<script setup lang="ts">
-import { IonApp, IonContent, IonIcon, IonItem, IonThumbnail, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
+<script setup>
+import { IonRefresher, IonRefresherContent, IonApp, IonContent, IonIcon, IonItem, useIonRouter, IonThumbnail, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { ref } from 'vue';
-import { heartHalf, person, briefcase, home, people, listCircle, notificationsCircle, stopCircle, checkmarkCircle } from 'ionicons/icons';
-import FemaleIcon from "/female.png"
-import MaleIcon from "/male.png"
+import { chevronDownCircleOutline, heartHalf, person, briefcase, power, helpCircle, home, people, listCircle, notificationsCircle, stopCircle, checkmarkCircle } from 'ionicons/icons';
+// import FemaleIcon from "/female.png"
+// import MaleIcon from "/male.png"
 import { useCookie } from "vue-cookie-next"
+import { signOut } from "firebase/auth";
+import { Authenticate } from "@/firebase/config";
+import { useRouter } from 'vue-router';
 
-const { getCookie } = useCookie()
+const { getCookie, setCookie } = useCookie()
+const ionRouter = useIonRouter()
+const vueRouter = useRouter()
 
 let loggedInUserName = ref(getCookie('loggedInUserName'))
 let loggedInUserEmail = ref(getCookie('loggedInUserEmail'))
+let loggedInUserImage = ref(getCookie('loggedInUserImage'))
+
 
 const selectedIndex = ref(0);
-const selectedCatIndex = ref(5);
 
 const appPages = [
   {
@@ -85,46 +106,67 @@ const appPages = [
     url: '/folder/Pause',
     iosIcon: stopCircle,
     mdIcon: stopCircle,
-  }
-];
-
-const categories = [
+  },
   { 
     title: 'Family',
-    url: '/category/Family',
-    icon: home,
+    url: '/folder/Family',
+    iosIcon: home,
+    mdIcon: home
   },
   { 
     title: 'Friends',
-    url: '/category/Friends',
-    icon: people,
+    url: '/folder/Friends',
+    iosIcon: people,
+    mdIcon: people
   },
   { 
     title: 'Work',
-    url: '/category/Work',
-    icon: briefcase,
+    url: '/folder/Work',
+    iosIcon: briefcase,
+    mdIcon: briefcase
   },
   { 
     title: 'Personal',
-    url: '/category/Personal',
-    icon: person,
+    url: '/folder/Personal',
+    iosIcon: person,
+    mdIcon: person
   },
   { 
     title: 'Health',
-    url: '/category/Health',
-    icon: heartHalf,
+    url: '/folder/Health',
+    iosIcon: heartHalf,
+    mdIcon: heartHalf
   }
 ];
+
 
 const path = window.location.pathname.split('folder/')[1];
 if (path !== undefined) {
   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
 }
 
-const catPath = window.location.pathname.split('category/')[1];
-if (catPath !== undefined) {
-  selectedCatIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === catPath.toLowerCase());
+const handleRefresh = (event) => {
+  setTimeout(() => {
+    // Any calls to load data go here
+    vueRouter.go(0)
+    event.target.complete();
+  }, 2000);
+};
+
+const signOutUser = () => {
+  signOut(Authenticate).then(() => {
+    // Sign-out successful.
+    setCookie('loggedInUserName', '')
+    setCookie('loggedInUserEmail', '')
+    setCookie('loggedInUserId', '')
+    setCookie('loggedInUserImage', '')
+    ionRouter.push('/views/Initial')
+  }).catch((error) => {
+    // An error happened.
+    console.log('sorry', error.message)
+  });
 }
+
 
 </script>
 
@@ -250,5 +292,16 @@ ion-item.selected {
 .ios body .userContainer {
   margin-left: 0.5rem;
 }
-
+.about h3 {
+  margin-top: 2rem;
+  margin-left: 1rem;
+  font-size: 1rem;
+}
+.about ion-item {
+  display: flex;
+  align-items: center;
+}
+.about ion-item ion-icon {
+  margin-right: 2rem;
+}
 </style>

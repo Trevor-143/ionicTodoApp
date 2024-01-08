@@ -5,6 +5,10 @@ const routes = [
     path: '/views/AddTask',
     component: () => import ('../views/AddTask.vue')
   },
+  {
+    path: '/views/About',
+    component: () => import ('../views/About.vue')
+  },
   // {
   //   path: '/',
   //   redirect: '/views/AddTask'
@@ -14,13 +18,17 @@ const routes = [
     component: () => import ('../views/Initial.vue')
   },
   {
+    path: '/views/Initial',
+    component: () => import ('../views/Initial.vue')
+  },
+  {
     path: '/folder/:id',
     component: () => import ('../views/FolderPage.vue')
   },
-  {
-    path: '/category/:id',
-    component: () => import ('../views/Category.vue')
-  }
+  // {
+  //   path: '/category/:id',
+  //   component: () => import ('../views/Category.vue')
+  // }
 ]
 
 const router = createRouter({

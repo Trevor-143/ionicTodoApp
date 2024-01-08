@@ -44,4 +44,9 @@ ion-icon {
     color: green;
     font-size: 2rem;
 }
+@media (prefers-color-scheme: dark) {
+    .load {
+        background-color: #243323;
+    }
+}
 </style>

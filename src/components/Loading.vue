@@ -40,4 +40,9 @@ h4 {
     /* background-color: red; */
     margin-top: 0.5rem;
 }
+@media (prefers-color-scheme: dark) {
+    .load {
+        background-color: #1f1f1f;
+    }
+}
 </style>
