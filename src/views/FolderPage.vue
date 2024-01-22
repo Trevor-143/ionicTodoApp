@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonIcon, IonPage, IonTitle, IonToolbar, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/vue';
+import { IonButtons, useIonRouter, IonContent, IonHeader, IonMenuButton, IonIcon, IonPage, IonTitle, IonToolbar, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/vue';
 import AllItem from "@/components/AllItem.vue"
 import { checkmarkCircle, notificationsCircle, stopCircle, grid, pauseCircle, trash } from "ionicons/icons"
 import { Store } from "@/firebase/config"
@@ -84,6 +84,7 @@ const tasksCollection = ref([])
 const route = useRoute();
 const taskID = ref(route.params.id);
 const { getCookie } = useCookie()
+const ionRouter = useIonRouter()
 
 let loggedInUserId = ref(getCookie('loggedInUserId'))
 
@@ -168,6 +169,8 @@ const getTasks = (newId) => {
     } else {
       tasksCollection.value = []
     }
+  } else {
+    ionRouter.push('/views/AddTask')
   }
 }
 

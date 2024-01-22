@@ -216,7 +216,7 @@ ion-menu.md ion-list#labels-list ion-list-header {
 ion-menu.md ion-item {
   --padding-start: 10px;
   --padding-end: 10px;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
 }
 
 ion-menu.md ion-item.selected {

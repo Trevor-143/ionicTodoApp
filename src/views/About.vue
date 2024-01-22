@@ -59,8 +59,6 @@ img {
     width: 50px;
 }
 .rem {
-    background-color: #fff;
-    padding: 1rem;
     margin-top: 2rem;
     border-radius: 1rem;
 }
