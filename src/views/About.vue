@@ -4,7 +4,7 @@
             <ion-toolbar>
                 <ion-buttons slot="start">
                     <ion-menu-button color="primary">
-                        <ion-icon :icon="grid" ></ion-icon>
+                        <ion-icon :icon="menu" ></ion-icon>
                     </ion-menu-button>
                 </ion-buttons>
                 <ion-title>About</ion-title>
@@ -30,7 +30,7 @@
 
 <script setup>
 import { IonPage, IonHeader, IonText, IonThumbnail, IonContent, IonToolbar, IonButtons, IonMenuButton, IonIcon, IonTitle } from "@ionic/vue"
-import { grid } from "ionicons/icons"
+import { menu } from "ionicons/icons"
 
 </script>
 

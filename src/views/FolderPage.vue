@@ -4,7 +4,7 @@
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-menu-button color="primary">
-            <ion-icon :icon="grid" ></ion-icon>
+            <ion-icon :icon="menu" ></ion-icon>
           </ion-menu-button>
         </ion-buttons>
         <ion-title>{{ $route.params.id }}</ion-title>
@@ -69,7 +69,7 @@
 <script setup>
 import { IonButtons, useIonRouter, IonContent, IonHeader, IonMenuButton, IonIcon, IonPage, IonTitle, IonToolbar, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/vue';
 import AllItem from "@/components/AllItem.vue"
-import { checkmarkCircle, notificationsCircle, stopCircle, grid, pauseCircle, trash } from "ionicons/icons"
+import { checkmarkCircle, notificationsCircle, stopCircle, menu, pauseCircle, trash } from "ionicons/icons"
 import { Store } from "@/firebase/config"
 import { collection, query, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { onMounted, ref, watchEffect, watch } from "vue"

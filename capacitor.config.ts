@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.tascky',
+  appId: 'com.tascky.ionic',
   appName: 'Tascky',
   webDir: 'dist',
   server: {

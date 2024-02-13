@@ -4,7 +4,7 @@
             <ion-toolbar>
                 <ion-buttons slot="start">
                     <ion-menu-button color="primary">
-                        <ion-icon :icon="grid" ></ion-icon>
+                        <ion-icon :icon="menu" ></ion-icon>
                     </ion-menu-button>
                 </ion-buttons>
                 <ion-title>{{ timeOfDay }}</ion-title>
@@ -38,7 +38,7 @@
                         </ion-select>
                     </ion-item>
                     <div class="addBtnCont">
-                        <ion-button expand="block" shape="round" @click="addTask" :disabled=" newTaskForm.title === '' ? true:false">Add Task</ion-button>
+                        <ion-button expand="block" @click="addTask" :disabled=" newTaskForm.title === '' ? true:false">Add Task</ion-button>
                     </div>
                 </ion-list>
             </div>
@@ -64,7 +64,7 @@
 <script setup>
 
 import { IonPage, IonHeader, IonNavLink, IonSelect, IonThumbnail, IonSelectOption, IonIcon, IonList, IonItem, IonInput, IonLabel, IonButton, IonContent, IonButtons, IonMenuButton, IonTitle, IonToolbar,  } from "@ionic/vue"
-import { checkmarkCircle, notificationsCircle, stopCircle, addCircle, listCircle, alertCircle, pauseCircle, grid } from "ionicons/icons"
+import { checkmarkCircle, notificationsCircle, stopCircle, addCircle, listCircle, menu, grid } from "ionicons/icons"
 import AllItem from "@/components/AllItem.vue"
 import Loading from "@/components/Loading.vue"
 import Done from "@/components/Done.vue"
@@ -181,9 +181,9 @@ ion-title {
     padding: 1rem;
     border-radius: 1rem;
     color: #ffffff;
-    box-shadow: 0px 7px 32px -11px rgba(0,0,0,0.75);
+    /* box-shadow: 0px 7px 32px -11px rgba(0,0,0,0.75);
 -webkit-box-shadow: 0px 7px 32px -11px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 7px 32px -11px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 7px 32px -11px rgba(0,0,0,0.75); */
 }
 .start ion-icon {
     color: #4c8dff;
@@ -229,11 +229,9 @@ ion-item {
     background-color: #f3f3f3;
     
 }
-/* .addBtnCont {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} */
+.addBtnCont ion-button {
+    --border-radius: 1rem;
+}
 ion-button {
     /* --border-radius: 1rem; */
     --padding-top: 1rem;
